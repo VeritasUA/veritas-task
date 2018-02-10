@@ -1,3 +1,4 @@
+```
 CREATE TABLE customer (
   id INT(11) NOT NULL AUTO_INCREMENT,
   created DATETIME NOT NULL COMMENT 'UTC',
@@ -25,8 +26,10 @@ CREATE TABLE customer_order (
     REFERENCES customer(id) ON DELETE RESTRICT ON UPDATE CASCADE
 )
 ENGINE = INNODB;
+```
 
-# топ 500 пользователей с максимальным суммарным тоталом (status заказа должен быть success)
+топ 500 пользователей с максимальным суммарным тоталом (status заказа должен быть success)
+```
 SELECT c.*, orders.order_total
   FROM customer c
   INNER JOIN (
@@ -38,9 +41,10 @@ SELECT c.*, orders.order_total
       ORDER BY order_total DESC
       LIMIT 500
     ) orders ON orders.id_customer = c.id
+```
 
-
-# топ 500 пользователей за последний год, у которых нет ни одного заказа со статусом success, сортировка по дате регистрации
+топ 500 пользователей за последний год, у которых нет ни одного заказа со статусом success, сортировка по дате регистрации
+```
 SELECT * FROM (
   SELECT DISTINCT(c.id), c.created, c.email
   FROM customer c
@@ -48,12 +52,14 @@ SELECT * FROM (
   LIMIT 500
 ) customers
   ORDER BY customers.created DESC
+```
 
-
-# топ 500 заказов, созданных в будний день за последние 3 месяца (вывести orderid, email, date), сортировка по дате заказа
+топ 500 заказов, созданных в будний день за последние 3 месяца (вывести orderid, email, date), сортировка по дате заказа
+```
 SELECT co.id AS orderid, c.email, co.created AS date
   FROM customer_order co
   LEFT JOIN customer c ON co.id_customer = c.id
   WHERE co.created > DATE_SUB(NOW(), INTERVAL 3 MONTH) AND WEEKDAY(co.created) IN (0,1,2,3,4)
   ORDER BY co.created DESC
   LIMIT 500
+```
