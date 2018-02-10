@@ -15,16 +15,16 @@ class Customer
     public static function getTopByOrdersTotal($limit = 500)
     {
         $sql = "SELECT c.created, c.firstname, c.lastname, c.email, orders.orders_total
-FROM customer c
-INNER JOIN (
-  SELECT co.id_customer, SUM(co.total) AS orders_total
-  FROM customer_order co
-  FORCE INDEX (IDX_customer_order2) 
-  WHERE co.status = :status_success
-  GROUP BY co.id_customer
-  ORDER BY orders_total DESC
-  LIMIT :limit
-) orders ON orders.id_customer = c.id";
+                FROM customer c
+                INNER JOIN (
+                  SELECT co.id_customer, SUM(co.total) AS orders_total
+                  FROM customer_order co
+                  FORCE INDEX (IDX_customer_order2) 
+                  WHERE co.status = :status_success
+                  GROUP BY co.id_customer
+                  ORDER BY orders_total DESC
+                  LIMIT :limit
+                ) orders ON orders.id_customer = c.id";
 
 
         $conn = DB::getInstance();
